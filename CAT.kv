@@ -1,0 +1,38 @@
+ScreenManager:
+    MainScreen:
+    GamesScreen:
+
+<MainScreen>:
+    name: 'main'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Cinematronics Audio Tester'
+            font_size: 30
+        BoxLayout:
+            orientation: 'horizontal'
+            AnchorLayout:
+                Button:
+                    text: 'Settings'
+                    font_size: 20
+                    size_hint: None, None
+                    height: 50
+                    anchor: 'center'
+            AnchorLayout:
+                Button:
+                    text: 'Games'
+                    font_size: 20
+                    size_hint: None, None
+                    height: 50
+                    anchor: 'center'
+                    on_press: app.root.current = 'games'
+
+<GamesScreen>:
+    name: 'games'
+    Label:
+        text: 'Games List'
+        font_size: 30
+    Button:
+        text: 'Back'
+        font_size: '20'
+        on_press: app.root.current = 'main'
