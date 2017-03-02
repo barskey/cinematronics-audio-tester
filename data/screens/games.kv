@@ -1,0 +1,19 @@
+<GameButton>:
+	font_size: 20
+	size_hint: None, None
+	height: 50
+	width: 130
+	on_press:
+		app.root.transition.direction = 'left'
+		app.root.current = 'sounds'
+
+MyScreen:
+	name: 'Games'
+
+	Label:
+		text: 'Select A Game'
+		bold: True
+		font_size: 30
+		size_hint_y: None
+		height: 40
+		color: [0.33, 0.5, 1, 1]
