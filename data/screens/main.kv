@@ -25,6 +25,5 @@ MyScreen:
                     size_hint: None, None
                     height: 50
                     anchor: 'center'
-                    on_press:
-						root.manager.transition.direction = 'left'
-						root.manager.current = 'games'
+                    on_release:
+						app.go_screen(1)

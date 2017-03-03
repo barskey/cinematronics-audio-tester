@@ -1,44 +1,186 @@
-#:import SwapTransition kivy.uix.screenmanager.SwapTransition
-
 BoxLayout:
-	orientation: 'vertical'
-
-	canvas.before:
+	canvas:
 		Rectangle:
 			pos: self.pos
 			size: self.size
-			source: 'data\\bg.jpg'
-	ScreenManager:
-		id: sm
-		on_current_screen:
-			idx = app.screen_names.index(args[1].name)
-			if idx > -1: app.hierarchy.append(idx)
+			source: 'data/bg.jpg'
 
-	Button:
-		text: 'Back'
-		font_size: 20
-		size_hint: None, None
-		height: 40
-		pos_hint: {'left': 0, 'bottom': 0}
-		color: [0.33, 0.5, 1, 1]
-		on_press:
-			root.manager.transition.direction = 'right'
-			app.manager.current = 'main'
-	ToggleButton:
-		text: 'Advanced'
-		font_size: 20
-		size_hint: None, None
-		height: 40
-		pos_hint: {'right': 1, 'bottom': 0}
-		color: [0.33, 0.5, 1, 1]
-		on_press:
-			root.manager.transition = SwapTransition()
-			root.manager.current = 'advanced'
-		
-<MyScreen>:
-	StackLayout:
-		id: btnstack
-		padding: 35
-		spacing: 10
+<MainMenu>:
+	name: 'MainMenu'
 
+	BoxLayout:
+        orientation: 'vertical'
 
+        Label:
+            text: 'Cinematronics Audio Tester'
+            font_size: 30
+			bold: True
+			color: [0.33, 0.5, 1, 1]
+
+		BoxLayout:
+            orientation: 'horizontal'
+            AnchorLayout:
+                Button:
+                    text: 'Settings'
+                    font_size: 20
+					bold: True
+                    size_hint: None, None
+                    height: 50
+                    anchor_x: 'left'
+					anochor_y: 'top'
+
+			AnchorLayout:
+                Button:
+                    text: 'Games'
+                    font_size: 20
+					bold: True
+                    size_hint: None, None
+                    height: 50
+                    anchor_x: 'center'
+					anchor_y: 'center'
+                    on_release:
+						app.go_screen('Games', 'left')
+
+<GameButton>:
+	font_size: 20
+	size_hint: None, None
+	height: 50
+	width: 130
+	on_release:
+		app.set_selected_game(self.text)
+		app.go_screen('Sounds', 'left')
+
+<Games>:
+	name: 'Games'
+	id: Games
+
+	BoxLayout:
+		orientation: 'vertical'
+
+		Label:
+			text: 'Select A Game'
+			bold: True
+			font_size: 30
+			size_hint_y: 0.125
+			height: 40
+			color: [0.33, 0.5, 1, 1]
+
+		StackLayout:
+			id: btnstack
+			padding: 35
+			spacing: 10
+			size_hint_y: 0.75
+
+		Button:
+			text: 'Back'
+			font_size: 20
+			size_hint: None, 0.125
+			color: [0.33, 0.5, 1, 1]
+			on_release:
+				app.go_screen('MainMenu', 'right')
+
+<SoundButton>:
+	font_size: 20
+	size_hint: None, None
+	height: 50
+	width: 130
+	on_press:
+		app.play_sound(self.text)
+
+<Sounds>:
+	name: 'Sounds'
+	id: Sounds
+
+	BoxLayout:
+		orientation: 'vertical'
+
+		Label:
+			size_hint_y: 0.125
+
+			text: 'Select A Sound To Activate'
+			bold: True
+			font_size: 30
+			color: [0.33, 0.5, 1, 1]
+
+		ScrollView:
+			do_scroll_x: False
+			size_hint_y: 0.75
+
+			StackLayout:
+				size_hint_y: None
+				height: self.minimum_height
+
+				id: btnstack
+				padding: 35
+				spacing: 10
+
+		RelativeLayout:
+			size_hint_y: 0.125
+
+			Button:
+				text: 'Back'
+				font_size: 20
+				size_hint: None, None
+				width: 100
+				height: 40
+				pos_hint: {'left': 0}
+				color: [0.33, 0.5, 1, 1]
+				on_release:
+					app.go_screen('Games', 'right')
+
+			Button:
+				text: 'Advanced'
+				font_size: 20
+				size_hint: None, None
+				width: 100
+				height: 40
+				pos_hint: {'right': 1}
+				color: [1, 1, 0, 1]
+				on_release:
+					app.go_screen('AdvSounds', 'None')
+
+<AdvSounds>:
+	name: 'AdvSounds'
+
+	BoxLayout:
+		orientation: 'vertical'
+
+		Label:
+			size_hint_y: 0.125
+
+			text: 'Toggle Input States'
+			bold: True
+			font_size: 30
+			color: [0.33, 0.5, 1, 1]
+
+		StackLayout:
+			size_hint_y: 0.75
+
+			id: btnstack
+			padding: 35
+			spacing: 10
+
+		RelativeLayout:
+			size_hint_y: 0.125
+
+			Button:
+				text: 'Back'
+				font_size: 20
+				size_hint: None, None
+				width: 100
+				height: 40
+				pos_hint: {'left': 0}
+				color: [0.33, 0.5, 1, 1]
+				on_release:
+					app.go_screen('Games', 'right')
+
+			Button:
+				text: 'Easy'
+				font_size: 20
+				size_hint: None, None
+				width: 100
+				height: 40
+				pos_hint: {'right': 1}
+				color: [1, 1, 0, 1]
+				on_release:
+					app.go_screen('Sounds', 'None')
