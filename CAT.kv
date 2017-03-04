@@ -15,7 +15,7 @@ BoxLayout:
             text: 'Cinematronics Audio Tester'
             font_size: 30
 			bold: True
-			color: [0.33, 0.5, 1, 1]
+			color: [1, 0, 0, 1]
 
 		BoxLayout:
             orientation: 'horizontal'
@@ -47,12 +47,11 @@ BoxLayout:
 	height: 50
 	width: 130
 	on_release:
-		app.set_selected_game(self.text)
+		app.set_selected_game(self.name)
 		app.go_screen('Sounds', 'left')
 
 <Games>:
 	name: 'Games'
-	id: Games
 
 	BoxLayout:
 		orientation: 'vertical'
@@ -63,7 +62,7 @@ BoxLayout:
 			font_size: 30
 			size_hint_y: 0.125
 			height: 40
-			color: [0.33, 0.5, 1, 1]
+			color: [1, 0, 0, 1]
 
 		StackLayout:
 			id: btnstack
@@ -74,8 +73,8 @@ BoxLayout:
 		Button:
 			text: 'Back'
 			font_size: 20
+			background_color: [0.5, 0.5, 0.5, 1]
 			size_hint: None, 0.125
-			color: [0.33, 0.5, 1, 1]
 			on_release:
 				app.go_screen('MainMenu', 'right')
 
@@ -84,33 +83,32 @@ BoxLayout:
 	size_hint: None, None
 	height: 50
 	width: 130
-	on_press:
-		app.play_sound(self.text)
+	on_release:
+		app.play_sound(self.name)
 
 <Sounds>:
 	name: 'Sounds'
-	id: Sounds
 
 	BoxLayout:
 		orientation: 'vertical'
 
 		Label:
+			id: title
 			size_hint_y: 0.125
-
 			text: 'Select A Sound To Activate'
 			bold: True
 			font_size: 30
-			color: [0.33, 0.5, 1, 1]
+			color: [1, 0, 0, 1]
 
 		ScrollView:
+			id: sv
 			do_scroll_x: False
 			size_hint_y: 0.75
 
 			StackLayout:
+				id: btnstack
 				size_hint_y: None
 				height: self.minimum_height
-
-				id: btnstack
 				padding: 35
 				spacing: 10
 
@@ -120,25 +118,31 @@ BoxLayout:
 			Button:
 				text: 'Back'
 				font_size: 20
+				background_color: [0.5, 0.5, 0.5, 1]
 				size_hint: None, None
 				width: 100
 				height: 40
 				pos_hint: {'left': 0}
-				color: [0.33, 0.5, 1, 1]
 				on_release:
 					app.go_screen('Games', 'right')
 
 			Button:
 				text: 'Advanced'
 				font_size: 20
+				background_color: [1, 0.5, 0, 1]
 				size_hint: None, None
 				width: 100
 				height: 40
 				pos_hint: {'right': 1}
-				color: [1, 1, 0, 1]
 				on_release:
 					app.go_screen('AdvSounds', 'None')
 
+<SmButton>:
+	background_color: [0, 0.8, 0, 1]
+	size_hint: None, None
+	width: 40
+	height: 40
+					
 <AdvSounds>:
 	name: 'AdvSounds'
 
@@ -146,19 +150,74 @@ BoxLayout:
 		orientation: 'vertical'
 
 		Label:
+			id: title
 			size_hint_y: 0.125
 
-			text: 'Toggle Input States'
+			text: 'Set Input States Directly'
 			bold: True
 			font_size: 30
-			color: [0.33, 0.5, 1, 1]
+			color: [1, 0, 0, 1]
 
-		StackLayout:
+		FloatLayout:
+			id: schematic
 			size_hint_y: 0.75
-
-			id: btnstack
-			padding: 35
-			spacing: 10
+			
+			canvas:
+				Color:
+					rgb: 1, 1, 1
+				Line:
+					points: [75, 110, 180, 110]
+					width: 1
+				Line:
+					points: [75, 160, 180, 160]
+					width: 1
+				Line:
+					points: [75, 210, 180, 210]
+					width: 1
+			Label:
+				text: 'Green: Toggle Hi/Lo'
+				size_hint: None, None
+				color: [0, 0.8, 0, 1]
+				x: 30
+				y: 10
+			Label:
+				text: 'Purple: Pulse Clk'
+				size_hint: None, None
+				color: [0.9, 0, 0.9, 1]
+				x: 30
+				y: 30
+			SmButton:
+				id: J414
+				text: 'J4-14'
+				x: 30
+				y: 100
+			SmButton:
+				id: J415
+				text: 'J4-15'
+				x: 30
+				y: 150
+			SmButton:
+				id: J415
+				text: 'J4-16'
+				x: 30
+				y: 200
+			SmButton:
+				id: J411
+				text: 'J4-11'
+				x: 200
+				y: 50
+			SmButton:
+				id: J412
+				background_color: [0.9, 0, 0.9, 1]
+				text: 'J4-12'
+				x: 200
+				y: 100
+			SmButton:
+				id: J413
+				background_color: [0.9, 0, 0.9, 1]
+				text: 'J4-13'
+				x: 200
+				y: 150
 
 		RelativeLayout:
 			size_hint_y: 0.125
@@ -166,21 +225,21 @@ BoxLayout:
 			Button:
 				text: 'Back'
 				font_size: 20
+				background_color: [0.5, 0.5, 0.5, 1]
 				size_hint: None, None
 				width: 100
 				height: 40
 				pos_hint: {'left': 0}
-				color: [0.33, 0.5, 1, 1]
 				on_release:
 					app.go_screen('Games', 'right')
 
 			Button:
 				text: 'Easy'
 				font_size: 20
+				background_color: [0, 1, 0, 1]
 				size_hint: None, None
 				width: 100
 				height: 40
 				pos_hint: {'right': 1}
-				color: [1, 1, 0, 1]
 				on_release:
 					app.go_screen('Sounds', 'None')

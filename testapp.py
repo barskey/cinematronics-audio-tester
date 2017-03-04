@@ -3,8 +3,8 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.config import Config
 from kivy.uix.button import Button
-from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import NumericProperty, StringProperty, ListProperty
+from kivy.uix.image import Image
+from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition, NoTransition
 
 #// Armor Attack
@@ -100,7 +100,7 @@ SoundBoard = [
 	[ 'Armor Attack', len(AASounds), AASounds],
 	[ 'Rip Off',      len(ROSounds), ROSounds],
 	[ 'Solar Quest',  len(SQSounds), SQSounds],
-	[ 'Space War(s)', len(SWSounds), SWSounds],
+	[ 'Space Wars', len(SWSounds), SWSounds],
 	[ 'Star Castle',  len(SCSounds), SCSounds],
 	[ 'Star Hawk',    len(SHSounds), SHSounds],
 	[ 'Sundance',     len(SDSounds), SDSounds],
@@ -124,50 +124,56 @@ blue = [0.33, 0.5, 1, 1]
 Config.set('graphics', 'width', '480')
 Config.set('graphics', 'height', '320')
 
-class GameButton(Button):
+class GameButton(ButtonBehavior, Image):
 	pass
 
 class SoundButton(Button):
+	pass
+
+class SmButton(Button):
 	pass
 
 class MainMenu(Screen):
 	pass
 
 class Sounds(Screen):
-	game = None
+	gamename = None
 
 	def on_pre_enter(self):
 		self.ids.btnstack.clear_widgets()
-		id = 0
-
-		for sound in GameBoards[self.game]:
+		self.ids.title.text = self.gamename + ': Activate Sound'
+		
+		if len(GameBoards[self.gamename]) < 9:
+			self.ids.sv.do_scroll_y = False
+		else:
+			self.ids.sv.do_scroll_y = True
+		
+		# First button to Initialize sound board
+		btn = SoundButton()
+		btn.text = 'Initialize'
+		btn.name = 'Init'
+		btn.color = [1, 1, 0, 1]
+		self.ids.btnstack.add_widget(btn)
+		
+		# Add rest of sound buttons
+		for sound in GameBoards[self.gamename]:
 			btn = SoundButton()
 			btn.text = sound[0]
-			btn.id = str(id)
+			btn.name = sound[0]
 			self.ids.btnstack.add_widget(btn)
-			id += 1
-
-	def set_gamename(self, gamename):
-		self.game = gamename
-
-	def play_sound(self):
-		print sound
 
 class AdvSounds(Screen):
 	pass
 
 class Games(Screen):
-	game = StringProperty('')
 
 	def on_pre_enter(self):
 		self.ids.btnstack.clear_widgets()
-		id = 0
 		for game in SoundBoard:
 			btn = GameButton()
-			btn.text = game[0]
-			btn.id = str(id)
+			btn.name = game[0]
+			btn.source = 'data\\' + game[0] + '.png'
 			self.ids.btnstack.add_widget(btn)
-			id += 1
 
 cat = Builder.load_file('cat.kv')
 
@@ -180,6 +186,7 @@ sm.add_widget(AdvSounds(name='AdvSounds'))
 cat.add_widget(sm)
 
 class CATApp(App):
+	oldname = None
 
 	def build(self):
 		return cat
@@ -193,10 +200,24 @@ class CATApp(App):
 		sm.current = screen
 
 	def set_selected_game(self, gamename):
-		sm.screens[2].game = gamename
+		if self.oldname != gamename:
+			self.oldname = gamename
+			sm.screens[2].gamename = gamename
+
+	def set_selected_sound(self, soundname):
+		if self.oldname != soundname:
+			self.oldname = soundname
+			sm.screens[2].set_soundname(soundname)
 
 	def play_sound(self, soundname):
-		print soundname
+		if self.oldname != soundname:
+			self.oldname = soundname
+			if soundname == 'Init':
+				print 'Initialize sound board'
+			else:
+				print 'Play', soundname
+		else:
+			self.oldname = None
 
 if __name__ == '__main__':
 	CATApp().run()
